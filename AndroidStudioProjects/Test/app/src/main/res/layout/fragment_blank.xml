@@ -1,22 +1,35 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/fon">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp" />
+
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chronometer"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="@string/stop"
+            android:id="@+id/button4"
+            android:onClick="onStopClick"
+            android:background="@drawable/but"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp" />
+
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/cir">
+        android:id="@+id/cir"
+        android:layout_below="@+id/button4">
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

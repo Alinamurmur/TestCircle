@@ -8,4 +8,5 @@
     <string name="b4">Что это?</string>
     <string name="title_activity_records">Records</string>
     <string name="tabl">Таблица игроков</string>
+    <string name="stop">Stop</string>
 </resources>
