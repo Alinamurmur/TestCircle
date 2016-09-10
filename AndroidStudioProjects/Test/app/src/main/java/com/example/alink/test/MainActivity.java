@@ -16,6 +16,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = getIntent();
+        String nameUser = intent.getStringExtra("nameUser");
+
         Button but1 = (Button)findViewById(R.id.button);
         Button but2 = (Button)findViewById(R.id.button2);
         Button but3 = (Button)findViewById(R.id.button3);
@@ -35,24 +38,15 @@ public class MainActivity extends Activity {
         but2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Reco fragmentR = new Reco();
-                fragmentTransaction.add(R.id.fragment_container,fragmentR);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                Intent intent = new Intent(MainActivity.this,Records.class);
+                startActivity(intent);
             }
         });
 
         but3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                BlankFragment fragment = new BlankFragment();
-                fragmentTransaction.add(R.id.fragment_container,fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                //intent.putExtra("nameUser",nameUser);
             }
         });
     }

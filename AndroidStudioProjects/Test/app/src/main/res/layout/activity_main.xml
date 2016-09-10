@@ -10,16 +10,9 @@
         android:src="@drawable/puh"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:id="@+id/imageView" />
+        android:id="@+id/imageView"
+        android:layout_marginTop="20dp" />
 
-    <TextView
-        android:text="Hello World!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_above="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="33dp" />
 
     <Button
         android:layout_width="150dp"

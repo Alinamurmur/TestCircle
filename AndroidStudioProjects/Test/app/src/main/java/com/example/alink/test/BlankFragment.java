@@ -1,9 +1,12 @@
 package com.example.alink.test;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
@@ -17,20 +20,81 @@ import android.widget.Toast;
 
 public class BlankFragment extends Fragment {
     private Chronometer chronometer;
-    Button stop;
+    Button stop,pause;
+    AlertDialog.Builder ald,paus;
+    long timeWhenStopped = 0;
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-    View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
-        chronometer =(Chronometer)rootView.findViewById(R.id.chronometer);
-        //chronometer.setBase(SystemClock.elapsedRealtime());
+
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
+
+        chronometer = (Chronometer) rootView.findViewById(R.id.chronometer);
         chronometer.start();
-        stop = (Button)rootView.findViewById(R.id.button4);
 
+        ald = new AlertDialog.Builder(getActivity());
+        ald.setMessage(R.string.message);
+        ald.setPositiveButton(R.string.menu, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        ald.setNeutralButton(R.string.b1, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                BlankFragment fragment = new BlankFragment();
+                fragmentTransaction.add(R.id.fragment_container,fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                timeWhenStopped = 0;
+            }
+        });
+        ald.setNegativeButton(R.string.b2, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent inte = new Intent(getActivity(), Records.class);
+                        startActivity(inte);
+                    }
+                });
+        ald.setCancelable(true);
+        ald.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+                Toast.makeText(getActivity(),"Вы ничего не выбрали :(",Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        stop = (Button) rootView.findViewById(R.id.button4);
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chronometer.stop();
+                ald.show();
+            }
+        });
+
+        paus =new AlertDialog.Builder(getActivity());
+        paus.setMessage("Игра приостановлена");
+        paus.setCancelable(false);
+        paus.setPositiveButton("Продолжить", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+                chronometer.start();
+            }
+        });
+
+        pause = (Button)rootView.findViewById(R.id.button5);
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
+                chronometer.stop();
+                paus.show();
             }
         });
 
