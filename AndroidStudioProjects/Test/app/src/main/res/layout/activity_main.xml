@@ -46,6 +46,7 @@
         android:layout_alignLeft="@+id/button2"
         android:layout_alignStart="@+id/button2" />
 
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

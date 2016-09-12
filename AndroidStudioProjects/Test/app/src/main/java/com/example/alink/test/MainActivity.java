@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -17,7 +18,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
-        String nameUser = intent.getStringExtra("nameUser");
+        final String nameUser = intent.getStringExtra("nameUser");
+
 
         Button but1 = (Button)findViewById(R.id.button);
         Button but2 = (Button)findViewById(R.id.button2);
@@ -32,21 +34,27 @@ public class MainActivity extends Activity {
                 fragmentTransaction.add(R.id.fragment_container,fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+                Intent namePass = new Intent(MainActivity.this,RecPlay.class);
+                namePass.putExtra("User",nameUser);
             }
         });
 
         but2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,Records.class);
-                startActivity(intent);
+                Intent intR = new Intent(MainActivity.this,Records.class);
+                startActivity(intR);
             }
         });
 
         but3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //intent.putExtra("nameUser",nameUser);
+                Intent intRe = new Intent(MainActivity.this,RecPlay.class);
+                startActivity(intRe);
+                // Intent intS = new Intent(this,Settings.class);
+                // intS.putExtra("nameUser",nameUser);
+                //startActivity(intS);
             }
         });
     }

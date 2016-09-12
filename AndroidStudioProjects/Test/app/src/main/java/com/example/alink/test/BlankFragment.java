@@ -24,11 +24,9 @@ public class BlankFragment extends Fragment {
     AlertDialog.Builder ald,paus;
     long timeWhenStopped = 0;
 
-
-
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
+
 
         chronometer = (Chronometer) rootView.findViewById(R.id.chronometer);
         chronometer.start();
@@ -56,8 +54,8 @@ public class BlankFragment extends Fragment {
         ald.setNegativeButton(R.string.b2, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent inte = new Intent(getActivity(), Records.class);
-                        startActivity(inte);
+                        final Intent intentR = new Intent(getActivity(),Records.class);
+                        startActivity(intentR);
                     }
                 });
         ald.setCancelable(true);
@@ -66,17 +64,19 @@ public class BlankFragment extends Fragment {
                 Toast.makeText(getActivity(),"Вы ничего не выбрали :(",Toast.LENGTH_LONG).show();
                     }
                 });
-
         stop = (Button) rootView.findViewById(R.id.button4);
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chronometer.stop();
+                String chronoText = chronometer.getText().toString();
+                Intent timePass = new Intent(getActivity(),RecPlay.class);
+                timePass.putExtra("Time",chronoText);
                 ald.show();
             }
         });
 
-        paus =new AlertDialog.Builder(getActivity());
+        paus = new AlertDialog.Builder(getActivity());
         paus.setMessage("Игра приостановлена");
         paus.setCancelable(false);
         paus.setPositiveButton("Продолжить", new DialogInterface.OnClickListener() {
@@ -98,12 +98,10 @@ public class BlankFragment extends Fragment {
             }
         });
 
-    RelativeLayout relativeLayout = (RelativeLayout)rootView.findViewById(R.id.cir);
-    relativeLayout.addView(new Circle(getActivity()));
-    return rootView;
-}
-
-
+        RelativeLayout relativeLayout = (RelativeLayout)rootView.findViewById(R.id.cir);
+        relativeLayout.addView(new Circle(getActivity()));
+        return rootView;
+    }
 }
 
 

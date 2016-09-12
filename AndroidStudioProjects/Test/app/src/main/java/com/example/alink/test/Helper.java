@@ -4,8 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
 
-public class Helper extends SQLiteOpenHelper{
+public class Helper extends SQLiteOpenHelper implements BaseColumns {
 
     private static final String DB_NAME = "reco";
     private static final int DB_VERSION = 1;
@@ -16,10 +17,13 @@ public class Helper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE RECORDS ("
+        db.execSQL("CREATE TABLE RECORDS (" + BaseColumns._ID
+                + " integer primary key autoincrement, "
                     +"NAME TEXT, "
                     +"TIME NUMERIC);");
-
+        insertTime(db,"Max","00:30");
+        insertTime(db,"Bill","01:20");
+        insertTime(db,"Alina","10:44");
     }
 
     @Override
@@ -27,10 +31,16 @@ public class Helper extends SQLiteOpenHelper{
 
     }
 
-    private static void insertTime (SQLiteDatabase db, String name, long time){
+    public static void insertTime (SQLiteDatabase db, String name, String time){
         ContentValues timeValues = new ContentValues();
         timeValues.put("NAME",name);
         timeValues.put("TIME",time);
         db.insert("RECORDS",null,timeValues);
+    }
+
+    public static void updateTable(SQLiteDatabase db,String name, String time){
+        ContentValues timeUpdateValues = new ContentValues();
+        timeUpdateValues.put("TIME",time);
+        db.update("RECORDS", timeUpdateValues, "NAME=?", new String[]{name});
     }
 }

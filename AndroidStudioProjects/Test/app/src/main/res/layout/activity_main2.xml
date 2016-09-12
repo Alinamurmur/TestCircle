@@ -17,7 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="name"
+
+        android:text="Alina"
         android:ems="10"
         android:id="@+id/editText"
         android:layout_centerVertical="true"
