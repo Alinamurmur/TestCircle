@@ -31,11 +31,11 @@ public class Records extends Activity {
         db = dbHelper.getWritableDatabase();
         try {
             cursor = db.query("RECORDS",new String[]{"NAME", "TIME"},
-                                null,null,null,null,null);
+                                null,null,null,null,"TIME");
             cursor.moveToFirst();
-            tableLayout.addView(rowMake(cursor.getString(0),cursor.getString(1),Color.CYAN));
-            while (cursor.moveToNext()){
+            while (cursor.isAfterLast() == false){
                 tableLayout.addView(rowMake(cursor.getString(0),cursor.getString(1),Color.GREEN));
+                cursor.moveToNext();
             }
             cursor.close();
             db.close();
@@ -44,7 +44,6 @@ public class Records extends Activity {
             toast.show();
         }
     }
-
 
     private TableRow rowMake (String name, String time,int color){
         TableRow row = new TableRow(this);

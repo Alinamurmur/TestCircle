@@ -22,8 +22,9 @@ public class Helper extends SQLiteOpenHelper implements BaseColumns {
                     +"NAME TEXT, "
                     +"TIME NUMERIC);");
         insertTime(db,"Max","00:30");
-        insertTime(db,"Bill","01:20");
         insertTime(db,"Alina","10:44");
+        insertTime(db,"Bill","01:20");
+
     }
 
     @Override

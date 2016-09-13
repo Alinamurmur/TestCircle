@@ -23,10 +23,10 @@ public class BlankFragment extends Fragment {
     Button stop,pause;
     AlertDialog.Builder ald,paus;
     long timeWhenStopped = 0;
+    String nameUser;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
-
 
         chronometer = (Chronometer) rootView.findViewById(R.id.chronometer);
         chronometer.start();
@@ -70,8 +70,10 @@ public class BlankFragment extends Fragment {
             public void onClick(View v) {
                 chronometer.stop();
                 String chronoText = chronometer.getText().toString();
-                Intent timePass = new Intent(getActivity(),RecPlay.class);
-                timePass.putExtra("Time",chronoText);
+                RecPlay rp = new RecPlay();
+                rp.setTimeUser(chronoText);
+                rp.setNameUser(nameUser);
+                rp.ProverkaAndUpdate();
                 ald.show();
             }
         });
@@ -101,6 +103,10 @@ public class BlankFragment extends Fragment {
         RelativeLayout relativeLayout = (RelativeLayout)rootView.findViewById(R.id.cir);
         relativeLayout.addView(new Circle(getActivity()));
         return rootView;
+    }
+
+    public void setNameUser(String name) {
+        this.nameUser = name;
     }
 }
 

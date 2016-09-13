@@ -31,11 +31,11 @@ public class MainActivity extends Activity {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 BlankFragment fragment = new BlankFragment();
+                fragment.setNameUser(nameUser);
                 fragmentTransaction.add(R.id.fragment_container,fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-                Intent namePass = new Intent(MainActivity.this,RecPlay.class);
-                namePass.putExtra("User",nameUser);
+
             }
         });
 
@@ -50,8 +50,9 @@ public class MainActivity extends Activity {
         but3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intRe = new Intent(MainActivity.this,RecPlay.class);
-                startActivity(intRe);
+               // Intent intRe = new Intent(MainActivity.this,RecPlay.class);
+                //intRe.putExtra("User",nameUser);
+               // startActivity(intRe);
                 // Intent intS = new Intent(this,Settings.class);
                 // intS.putExtra("nameUser",nameUser);
                 //startActivity(intS);
