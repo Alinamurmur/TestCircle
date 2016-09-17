@@ -1,15 +1,14 @@
 package com.example.alink.test;
 
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 
 public class RecPlay {
     String nameUser, timeUser;
-    Context context;
 
 
     public void setNameUser(String name) {
@@ -32,23 +31,33 @@ public class RecPlay {
         return sec;
     }
 
-    public void ProverkaAndUpdate() {
+    public void prov(Context context,SQLiteDatabase db){
+
+        Cursor cursor;
+        cursor = db.query("RECORDS",new String[]{"NAME", "TIME"},
+                null,null,null,null,null);
+        cursor.moveToFirst();
+        String nameBase = cursor.getString(0);
+        Helper.updateTable(db, nameBase, timeUser);
+        cursor.close();
+        db.close();
+    }
+
+    public void ProverkaAndUpdate(Context context) {
         int minUser = getMin(timeUser);
         int secUser = getSec(timeUser);
         boolean equ = false;
         SQLiteOpenHelper dbHelper = new Helper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.query("RECORDS", new String[]{"NAME", "TIME"},
-                null, null, null, null, null);
-
-        try {
-            if (cursor != null) {
+        Cursor cursor = db.query("RECORDS",new String[]{"NAME", "TIME"},
+                null,null,null,null,null);
+        String nameBase,timeBase;
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    String nameBase = cursor.getString(0);
+                    nameBase = cursor.getString(0);
                     if (nameBase.equals(nameUser)) {
                         equ = true;//чтобы потом знать, что не было ни одного совпадения
-                        String timeBase = cursor.getString(1);
+                        timeBase = cursor.getString(1);
                         int minBase = getMin(timeBase);
                         int secBase = getSec(timeBase);
                         if (minUser < minBase) {
@@ -62,19 +71,11 @@ public class RecPlay {
                     }
                     cursor.moveToNext();
                 }
-                cursor.close();
                 if (!equ) {
                     Helper.insertTime(db, nameUser, timeUser);
                 }
+        cursor.close();
+        db.close();
+        }
 
-            } else {
-                Helper.insertTime(db, nameUser, timeUser);
-            }
-            // cursor.close();
-            db.close();
-        }
-        catch (Exception e){
-            Toast.makeText(context,"Ох шит, печеньки закончились",Toast.LENGTH_LONG).show();
-        }
     }
-}

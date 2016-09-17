@@ -13,6 +13,7 @@ public class Main2Activity extends Activity {
    String nameUser;
     EditText editName;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

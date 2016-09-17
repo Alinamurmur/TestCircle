@@ -1,11 +1,6 @@
 package com.example.alink.test;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,11 +8,17 @@ import android.view.Gravity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
+import io.realm.Realm;
+
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class Records extends Activity {
-    SQLiteDatabase db;
-    Cursor cursor;
+   // SQLiteDatabase db;
+   // Cursor cursor;
+    boolean play;
+    Realm realm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +28,45 @@ public class Records extends Activity {
         tableLayout.setStretchAllColumns(true);
         tableLayout.setShrinkAllColumns(true);
 
+       // RealmConfiguration realmConfiguration =new RealmConfiguration.Builder(this)
+         //      .build();
+       // Realm.deleteRealm(realmConfiguration);
+       // realm = Realm.getInstance(realmConfiguration);
+        realm=Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Base base = realm.createObject(Base.class);
+                base.setName("Anna");
+                base.setTime("00:39");
+            }
+        });
+
+
+        Base b = realm.where(Base.class).findFirst();
+        realm.copyToRealm(b);
+        //RealmResult<Base> base = realm.where(Base.class).findAllSorted("time", Sort.ASCENDING);
+        // = realm.where(Base.class).findFirst();
+        tableLayout.addView(rowMake(b.getNameUser(),b.getTimeUser(),Color.GRAY));
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        realm.close();
+    }
+
+    /**
+        Intent intent =getIntent();
+        play=intent.getBooleanExtra("Play",false);
+
         SQLiteOpenHelper dbHelper = new Helper(this);
         db = dbHelper.getWritableDatabase();
+
+        if (play){
+
+        }
         try {
             cursor = db.query("RECORDS",new String[]{"NAME", "TIME"},
                                 null,null,null,null,"TIME");
@@ -37,13 +75,11 @@ public class Records extends Activity {
                 tableLayout.addView(rowMake(cursor.getString(0),cursor.getString(1),Color.GREEN));
                 cursor.moveToNext();
             }
-            cursor.close();
-            db.close();
         } catch (SQLiteException e) {
             Toast toast = Toast.makeText(this, "Ой как нехорошо вышло то", Toast.LENGTH_SHORT);
             toast.show();
         }
-    }
+    }**/
 
     private TableRow rowMake (String name, String time,int color){
         TableRow row = new TableRow(this);

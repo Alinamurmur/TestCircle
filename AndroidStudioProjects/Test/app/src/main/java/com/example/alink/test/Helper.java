@@ -44,4 +44,5 @@ public class Helper extends SQLiteOpenHelper implements BaseColumns {
         timeUpdateValues.put("TIME",time);
         db.update("RECORDS", timeUpdateValues, "NAME=?", new String[]{name});
     }
+
 }

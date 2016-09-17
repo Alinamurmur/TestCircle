@@ -7,16 +7,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+import java.util.Timer;
+import java.util.TimerTask;
 
+public class MainActivity extends Activity {
+    boolean play=false;
+    FrameLayout container;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        container = (FrameLayout)findViewById(R.id.frame);
+
+        Menu menu = new Menu();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.frame,menu);
+        ft.addToBackStack(null);
+        ft.commit();
+
+
+
+
+
+/**
         Intent intent = getIntent();
         final String nameUser = intent.getStringExtra("nameUser");
 
@@ -28,10 +47,12 @@ public class MainActivity extends Activity {
         but1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                play=true;
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 BlankFragment fragment = new BlankFragment();
                 fragment.setNameUser(nameUser);
+                fragment.setPlay(play);
                 fragmentTransaction.add(R.id.fragment_container,fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -43,6 +64,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intR = new Intent(MainActivity.this,Records.class);
+                intR.putExtra("Play",play);
                 startActivity(intR);
             }
         });
@@ -51,12 +73,13 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                // Intent intRe = new Intent(MainActivity.this,RecPlay.class);
-                //intRe.putExtra("User",nameUser);
+
                // startActivity(intRe);
                 // Intent intS = new Intent(this,Settings.class);
                 // intS.putExtra("nameUser",nameUser);
                 //startActivity(intS);
             }
-        });
+        });**/
     }
 }
+
