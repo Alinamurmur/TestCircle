@@ -12,13 +12,16 @@ import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,78 +32,104 @@ import java.util.TimerTask;
 
 public class BlankFragment extends Fragment {
     private Chronometer chronometer;
-    Button stop, pause;
-    AlertDialog.Builder ald, paus;
+    Button  pause;
+    AlertDialog.Builder ald, paus,nam;
     long timeWhenStopped = 0;
-    String nameUser;
+    String nameUser,timeUser;
     int sec = 0;
+    FloatingActionButton fbut;
+    Timer t;
     //RelativeLayout relativeLayout;
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
-        Timer t = new Timer();
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                sec = sec + 1;
-            }
-        }, 1000, 1000);
-        t.cancel();
+
+        final TextView secView = (TextView)rootView.findViewById(R.id.sec);
 
         chronometer = (Chronometer) rootView.findViewById(R.id.chronometer);
-        chronometer.start();
 
-        // final RecPlay rp = new RecPlay();
+        nam = new AlertDialog.Builder(getActivity());
+        nam.setMessage(R.string.priv);
+        final EditText inputName = new EditText(getActivity());
+        inputName.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction()== KeyEvent.ACTION_DOWN && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                    if (inputName.getText().toString().equals("")){
+                        Toast.makeText(getActivity(),"Нужно ввести имя",Toast.LENGTH_LONG).show();
+                    }
+                    else {nameUser = inputName.getText().toString();
+                        chronometer.start();
+                        t = new Timer();
+                        t.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                sec++;
+                                //secView.setText(sec);
+                            }
+                        }, 1000, 1000);}
+                    return true;
+                }
+                return false;
+            }
+        });
+        nam.setView(inputName);
+        nam.setPositiveButton(R.string.priv2, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (inputName.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Нужно ввести имя", Toast.LENGTH_LONG).show();
+                } else {
+                    nameUser = inputName.getText().toString();
+                    chronometer.start();
+                    t = new Timer();
+                    t.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            sec++;
+                            //secView.setText(sec);
+                        }
+                    }, 1000, 1000);
 
-/**
- ald = new AlertDialog.Builder(getActivity());
- ald.setMessage(R.string.message);
- ald.setPositiveButton(R.string.menu, new DialogInterface.OnClickListener() {
-@Override public void onClick(DialogInterface dialog, int which) {
-Intent intent = new Intent(getActivity(), MainActivity.class);
-startActivity(intent);
-getActivity.finish();
-}
-});
- ald.setNeutralButton(R.string.b1, new DialogInterface.OnClickListener() {
- public void onClick(DialogInterface dialog, int which) {
- FragmentManager fragmentManager = getFragmentManager();
- FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
- BlankFragment fragment = new BlankFragment();
- fragmentTransaction.add(R.id.fragment_container,fragment);
- fragmentTransaction.addToBackStack(null);
- fragmentTransaction.commit();
- timeWhenStopped = 0;
- }
- });
- ald.setNegativeButton(R.string.b2, new DialogInterface.OnClickListener() {
-@Override public void onClick(DialogInterface dialog, int which) {
-//rp.prov(getActivity(),);
-final Intent intentR = new Intent(getActivity(),Records.class);
-intentR.putExtra("Play",play);
-startActivity(intentR);
-}
-});
- ald.setCancelable(true);
- ald.setOnCancelListener(new DialogInterface.OnCancelListener() {
- public void onCancel(DialogInterface dialog) {
- Toast.makeText(getActivity(),"Вы ничего не выбрали :(",Toast.LENGTH_LONG).show();
- }
- });
- stop = (Button) rootView.findViewById(R.id.button4);
- stop.setOnClickListener(new View.OnClickListener() {
-@Override public void onClick(View v) {
-chronometer.stop();
-String chronoText = chronometer.getText().toString();
-//  rp.setTimeUser(chronoText);
-//  rp.setNameUser(nameUser);
-// rp.ProverkaAndUpdate(getActivity());
+                }
+            }
+        });
+        nam.show();
 
-ald.show();
-}
-});
- **/
+        ald = new AlertDialog.Builder(getActivity());
+        ald.setMessage(R.string.message);
+        ald.setPositiveButton(R.string.menu, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                //TODO vernutsia v menu
+            }
+        });
+        ald.setNeutralButton(R.string.b1, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                BlankFragment fragment = new BlankFragment();
+                fragmentTransaction.add(R.id.fragment_container,fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                timeWhenStopped = 0;
+            }
+        });
+        ald.setNegativeButton(R.string.b2, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                 final Intent intentR = new Intent(getActivity(),Records.class);
+                intentR.putExtra("Name",nameUser);
+                intentR.putExtra("TimeString",timeUser);
+                 startActivity(intentR);
+            }
+        });
+        ald.setCancelable(true);
+        ald.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+                Toast.makeText(getActivity(),"Вы ничего не выбрали :(",Toast.LENGTH_LONG).show();
+            }
+        });
+
         paus = new AlertDialog.Builder(getActivity());
         paus.setMessage("Игра приостановлена");
         paus.setCancelable(false);
@@ -110,6 +139,12 @@ ald.show();
                 dialog.cancel();
                 chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
                 chronometer.start();
+                t.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        sec++;
+                    }
+                }, 1000, 1000);
             }
         });
 
@@ -118,7 +153,7 @@ ald.show();
             @Override
             public void onClick(View v) {
                 timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
-                chronometer.stop();
+                chronometer.stop(); t.cancel();
                 paus.show();
             }
         });
@@ -137,11 +172,11 @@ ald.show();
         ArrayList<Integer> numb = getRandomNumber();
 
         for (int i = 0; i < 16; i++) {
-            FloatingActionButton fbut = new FloatingActionButton(getActivity());
+            fbut = new FloatingActionButton(getActivity());
             fbut.setImageResource(img[numb.get(i)]);
             fbut.setId(numb.get(i) + 1);
+            fbut.setOnClickListener(new MyListener());
             gridLayout.addView(fbut);
-
         }
         return rootView;
     }
@@ -160,8 +195,18 @@ ald.show();
         return numbGen;
     }
 
-    public void setNameUser(String nameUser) {
-        this.nameUser = nameUser;
+    public class MyListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            if (v.getId()<16){
+                 
+                fbut.setVisibility(View.INVISIBLE);
+            } else {
+                chronometer.stop(); t.cancel();
+                timeUser = chronometer.getText().toString();
+                ald.show();
+            }
+        }
     }
 }
 /**
@@ -181,7 +226,7 @@ ald.show();
             relativeLayout.addView(fbut);
         }
 
-
+**/
 
 
 

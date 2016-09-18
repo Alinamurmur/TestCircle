@@ -50,9 +50,10 @@ public class Main2Activity extends Activity {
         }
         else {
             nameUser = editName.getText().toString();
+
             Intent intent = new Intent(this,MainActivity.class);
-            intent.putExtra("nameUser",nameUser);
             startActivity(intent);
         }
     }
+
 }
