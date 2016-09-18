@@ -14,7 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends Activity {
-    boolean play=false;
+
     FrameLayout container;
     FragmentManager fragmentManager;
 
@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
         ft.replace(R.id.frame,menu);
         ft.addToBackStack(null);
         ft.commit();
+
 
 
 

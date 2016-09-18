@@ -132,7 +132,7 @@ ald.show();
         int[] img = {R.drawable.one, R.drawable.two, R.drawable.three, R.drawable.four,
                 R.drawable.five, R.drawable.six, R.drawable.seven, R.drawable.eight,
                 R.drawable.nine, R.drawable.ten, R.drawable.eleven, R.drawable.twelve,
-                R.drawable.one, R.drawable.one, R.drawable.one, R.drawable.one}; //TODO допилить картинки
+                R.drawable.thirteen, R.drawable.fourteen, R.drawable.fifteen, R.drawable.sixteen};
 
         ArrayList<Integer> numb = getRandomNumber();
 
@@ -159,24 +159,12 @@ ald.show();
         }
         return numbGen;
     }
+
+    public void setNameUser(String nameUser) {
+        this.nameUser = nameUser;
+    }
 }
-
-        /**for (int i=0;i<3;i++){
-        FloatingActionButton fbut = new FloatingActionButton(getActivity());
-        fbut.setX(rX(displaymetrics.widthPixels)); fbut.setY(rY(displaymetrics.heightPixels));
-        relativeLayout.addView(fbut);}
-
-    public int rX(int w) {
-        x = (int) (Math.random()*w - 100);
-        return x;
-    }
-    public int rY(int h) {
-        y = (int) (Math.random() * h + 100);
-        return y;
-    }
-        // relativeLayout.addView(new CircleButton(getActivity()));
-
-        int[]img ={R.drawable.one,R.drawable.two,R.drawable.three};
+/**
 
         for (int i=0;i<3;i++){
             FloatingActionButton fbut = new FloatingActionButton(getActivity());
@@ -193,16 +181,7 @@ ald.show();
             relativeLayout.addView(fbut);
         }
 
-    public int rX(int w) {
-        x = (int) (Math.random()*w + 40);
-        return x;
-    }
-    public int rY(int h) {
-        y = (int) (Math.random() * h + 40);
-        return y;
-    }
 
-    public  int getSec(){return sec;}**/
 
 
 
