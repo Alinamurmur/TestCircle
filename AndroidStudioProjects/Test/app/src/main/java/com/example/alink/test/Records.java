@@ -1,6 +1,7 @@
 package com.example.alink.test;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,7 +17,6 @@ import io.realm.Sort;
 public class Records extends Activity {
    // SQLiteDatabase db;
    // Cursor cursor;
-    boolean play;
     Realm realm;
 
 
@@ -28,10 +28,10 @@ public class Records extends Activity {
         tableLayout.setStretchAllColumns(true);
         tableLayout.setShrinkAllColumns(true);
 
-       // RealmConfiguration realmConfiguration =new RealmConfiguration.Builder(this)
-         //      .build();
-       // Realm.deleteRealm(realmConfiguration);
-       // realm = Realm.getInstance(realmConfiguration);
+        Intent intent = getIntent();
+        final String name = intent.getStringExtra("Name");
+        final String time = intent.getStringExtra("TimeString");
+
         realm=Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -39,15 +39,24 @@ public class Records extends Activity {
                 Base base = realm.createObject(Base.class);
                 base.setName("Anna");
                 base.setTime("00:39");
+                base.setName(name);
+                base.setTime(time);
             }
         });
 
 
-        Base b = realm.where(Base.class).findFirst();
-        realm.copyToRealm(b);
+        RealmResults<Base> realmResults= realm.where(Base.class).findAllSorted("timeUser");
+        int k = realmResults.size();
+        realm.copyToRealm(realmResults);
+
+        //Base b = realm.where(Base.class).findFirst();
+        //realm.copyToRealm(b);
         //RealmResult<Base> base = realm.where(Base.class).findAllSorted("time", Sort.ASCENDING);
-        // = realm.where(Base.class).findFirst();
-        tableLayout.addView(rowMake(b.getNameUser(),b.getTimeUser(),Color.GRAY));
+
+        for (int i=0;i<k;i++){
+            tableLayout.addView(rowMake(realmResults.get(0).toString(),realmResults.get(1).toString(),Color.GRAY));
+
+        }
 
     }
 
@@ -56,30 +65,6 @@ public class Records extends Activity {
         super.onDestroy();
         realm.close();
     }
-
-    /**
-        Intent intent =getIntent();
-        play=intent.getBooleanExtra("Play",false);
-
-        SQLiteOpenHelper dbHelper = new Helper(this);
-        db = dbHelper.getWritableDatabase();
-
-        if (play){
-
-        }
-        try {
-            cursor = db.query("RECORDS",new String[]{"NAME", "TIME"},
-                                null,null,null,null,"TIME");
-            cursor.moveToFirst();
-            while (cursor.isAfterLast() == false){
-                tableLayout.addView(rowMake(cursor.getString(0),cursor.getString(1),Color.GREEN));
-                cursor.moveToNext();
-            }
-        } catch (SQLiteException e) {
-            Toast toast = Toast.makeText(this, "Ой как нехорошо вышло то", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }**/
 
     private TableRow rowMake (String name, String time,int color){
         TableRow row = new TableRow(this);

@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +18,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.GridLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -44,15 +39,12 @@ public class BlankFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
-
-        final TextView secView = (TextView)rootView.findViewById(R.id.sec);
-
         chronometer = (Chronometer) rootView.findViewById(R.id.chronometer);
 
         nam = new AlertDialog.Builder(getActivity());
         nam.setMessage(R.string.priv);
         final EditText inputName = new EditText(getActivity());
-        inputName.setOnKeyListener(new View.OnKeyListener() {
+      /**  inputName.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction()== KeyEvent.ACTION_DOWN && (keyCode == KeyEvent.KEYCODE_ENTER)){
@@ -60,7 +52,6 @@ public class BlankFragment extends Fragment {
                         Toast.makeText(getActivity(),"Нужно ввести имя",Toast.LENGTH_LONG).show();
                     }
                     else {nameUser = inputName.getText().toString();
-                        chronometer.start();
                         t = new Timer();
                         t.schedule(new TimerTask() {
                             @Override
@@ -68,21 +59,23 @@ public class BlankFragment extends Fragment {
                                 sec++;
                                 //secView.setText(sec);
                             }
-                        }, 1000, 1000);}
+                        }, 1000, 1000);
+                        chronometer.start();
+                    }
                     return true;
                 }
                 return false;
             }
-        });
+        });**/
         nam.setView(inputName);
         nam.setPositiveButton(R.string.priv2, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (inputName.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Нужно ввести имя", Toast.LENGTH_LONG).show();
+
                 } else {
                     nameUser = inputName.getText().toString();
-                    chronometer.start();
                     t = new Timer();
                     t.schedule(new TimerTask() {
                         @Override
@@ -91,17 +84,23 @@ public class BlankFragment extends Fragment {
                             //secView.setText(sec);
                         }
                     }, 1000, 1000);
-
+                    chronometer.setBase(SystemClock.elapsedRealtime());
+                    chronometer.start();
                 }
             }
         });
+        nam.setCancelable(false);
         nam.show();
 
         ald = new AlertDialog.Builder(getActivity());
         ald.setMessage(R.string.message);
         ald.setPositiveButton(R.string.menu, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
-                //TODO vernutsia v menu
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Menu fragmentMenu = new Menu();
+                fragmentTransaction.replace(R.id.fragment_container,fragmentMenu);
+                fragmentTransaction.commit();
             }
         });
         ald.setNeutralButton(R.string.b1, new DialogInterface.OnClickListener() {
@@ -109,7 +108,7 @@ public class BlankFragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 BlankFragment fragment = new BlankFragment();
-                fragmentTransaction.add(R.id.fragment_container,fragment);
+                fragmentTransaction.replace(R.id.fragment_container,fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 timeWhenStopped = 0;
@@ -117,13 +116,13 @@ public class BlankFragment extends Fragment {
         });
         ald.setNegativeButton(R.string.b2, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
-                 final Intent intentR = new Intent(getActivity(),Records.class);
+                final Intent intentR = new Intent(getActivity(),Records.class);
                 intentR.putExtra("Name",nameUser);
                 intentR.putExtra("TimeString",timeUser);
-                 startActivity(intentR);
+                startActivity(intentR);
             }
         });
-        ald.setCancelable(true);
+        ald.setCancelable(false);
         ald.setOnCancelListener(new DialogInterface.OnCancelListener() {
             public void onCancel(DialogInterface dialog) {
                 Toast.makeText(getActivity(),"Вы ничего не выбрали :(",Toast.LENGTH_LONG).show();
@@ -139,12 +138,12 @@ public class BlankFragment extends Fragment {
                 dialog.cancel();
                 chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
                 chronometer.start();
-                t.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        sec++;
-                    }
-                }, 1000, 1000);
+               // t.schedule(new TimerTask() {
+                 //   @Override
+                   // public void run() {
+                     //   sec++;
+                   // }
+                //}, 1000, 1000);
             }
         });
 
@@ -158,16 +157,12 @@ public class BlankFragment extends Fragment {
             }
         });
 
-
-        // relativeLayout = (RelativeLayout) rootView.findViewById(R.id.cir);
-        // DisplayMetrics displaymetrics = getResources().getDisplayMetrics();
-
         GridLayout gridLayout = (GridLayout) rootView.findViewById(R.id.grid);
         gridLayout.setColumnCount(4);
-        int[] img = {R.drawable.one, R.drawable.two, R.drawable.three, R.drawable.four,
-                R.drawable.five, R.drawable.six, R.drawable.seven, R.drawable.eight,
-                R.drawable.nine, R.drawable.ten, R.drawable.eleven, R.drawable.twelve,
-                R.drawable.thirteen, R.drawable.fourteen, R.drawable.fifteen, R.drawable.sixteen};
+        int[] img = {R.drawable.n1, R.drawable.n2, R.drawable.n3, R.drawable.n4,
+                R.drawable.n5, R.drawable.n6, R.drawable.n7, R.drawable.n8,
+                R.drawable.n9, R.drawable.n10, R.drawable.n11, R.drawable.n12,
+                R.drawable.n13, R.drawable.n14, R.drawable.n15, R.drawable.n16};
 
         ArrayList<Integer> numb = getRandomNumber();
 
@@ -199,8 +194,10 @@ public class BlankFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (v.getId()<16){
-                 
-                fbut.setVisibility(View.INVISIBLE);
+                int Idb = v.getId();
+                FloatingActionButton b = (FloatingActionButton)v.findViewById(Idb);
+                b.setVisibility(View.INVISIBLE);
+
             } else {
                 chronometer.stop(); t.cancel();
                 timeUser = chronometer.getText().toString();
