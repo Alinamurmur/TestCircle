@@ -6,4 +6,14 @@
     <color name="fon">#ecffe3</color>
     <color name="circl">#c974e23c</color>
     <color name="numb">#103409</color>
+
+    <color name="r1">#a7ffeb</color>
+    <color name="r2">#64ffda</color>
+    <color name="r3">#1de9b6</color>
+    <color name="r4">#00bfa5</color>
+
+    <color name="t1">#ffea00</color>
+    <color name="t2">#00c853</color>
+    <color name="t3">#80cbc4</color>
+    <color name="t4">#f48fb1</color>
 </resources>

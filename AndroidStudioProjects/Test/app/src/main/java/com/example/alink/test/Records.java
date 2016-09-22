@@ -9,15 +9,16 @@ import android.view.Gravity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import java.util.Random;
+
 import io.realm.Realm;
 
 import io.realm.RealmResults;
-import io.realm.Sort;
 
 public class Records extends Activity {
-   // SQLiteDatabase db;
-   // Cursor cursor;
     Realm realm;
+
 
 
     @Override
@@ -33,40 +34,33 @@ public class Records extends Activity {
         final String time = intent.getStringExtra("TimeString");
 
         realm=Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Base base = realm.createObject(Base.class);
-                base.setName("Anna");
-                base.setTime("00:39");
-                base.setName(name);
-                base.setTime(time);
-            }
-        });
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Base base = realm.createObject(Base.class);
+
+                        base.setName(name);
+                        base.setTime(time);
+                }
+            });
 
 
         RealmResults<Base> realmResults= realm.where(Base.class).findAllSorted("timeUser");
-        int k = realmResults.size();
-        realm.copyToRealm(realmResults);
 
-        //Base b = realm.where(Base.class).findFirst();
-        //realm.copyToRealm(b);
-        //RealmResult<Base> base = realm.where(Base.class).findAllSorted("time", Sort.ASCENDING);
-
-        for (int i=0;i<k;i++){
-            tableLayout.addView(rowMake(realmResults.get(0).toString(),realmResults.get(1).toString(),Color.GRAY));
-
+        for (Base base:realmResults){
+            tableLayout.addView(rowMake(base.getNameUser(),base.getTimeUser()));
         }
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+       // del();
         realm.close();
     }
-
-    private TableRow rowMake (String name, String time,int color){
+    int colo [] = {R.color.t1,R.color.t2,R.color.t3,R.color.t4};
+    private TableRow rowMake (String name, String time){
         TableRow row = new TableRow(this);
         TextView nameView = new TextView(this);
         nameView.setText(name);
@@ -79,7 +73,17 @@ public class Records extends Activity {
         timeView.setGravity(Gravity.CENTER_HORIZONTAL);
         timeView.setTextSize(20);
         row.addView(timeView);
-        row.setBackgroundColor(color);
+
+        Random random = new Random();
+        row.setBackgroundColor(colo[random.nextInt(colo.length)]);
         return row;
     }
+
+    public void del (){
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.delete(Base.class);
+        realm.commitTransaction();
+    }
+
 }

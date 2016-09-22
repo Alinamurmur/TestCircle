@@ -34,7 +34,6 @@ public class BlankFragment extends Fragment {
     int sec = 0;
     FloatingActionButton fbut;
     Timer t;
-    //RelativeLayout relativeLayout;
 
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
@@ -99,7 +98,7 @@ public class BlankFragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Menu fragmentMenu = new Menu();
-                fragmentTransaction.replace(R.id.fragment_container,fragmentMenu);
+                fragmentTransaction.add(R.id.fragment_container,fragmentMenu);
                 fragmentTransaction.commit();
             }
         });
@@ -119,6 +118,7 @@ public class BlankFragment extends Fragment {
                 final Intent intentR = new Intent(getActivity(),Records.class);
                 intentR.putExtra("Name",nameUser);
                 intentR.putExtra("TimeString",timeUser);
+               // intentR.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentR);
             }
         });

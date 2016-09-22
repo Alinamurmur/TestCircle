@@ -26,7 +26,8 @@ public class Menu extends Fragment{
 
                 getActivity().getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, new BlankFragment())
+                        .add(R.id.fragment_container, new BlankFragment())
+                        .addToBackStack(null)
                         .commit();
             }
         });
@@ -42,11 +43,9 @@ public class Menu extends Fragment{
         but3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent intRe = new Intent(MainActivity.this,RecPlay.class);
-                // startActivity(intRe);
-                // Intent intS = new Intent(this,Settings.class);
-                // intS.putExtra("nameUser",nameUser);
-                //startActivity(intS);
+                Intent intent = new Intent(getActivity(),About.class);
+                startActivity(intent);
+
             }
         });
 
