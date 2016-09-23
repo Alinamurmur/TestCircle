@@ -26,7 +26,7 @@ public class Menu extends Fragment{
 
                 getActivity().getFragmentManager()
                         .beginTransaction()
-                        .add(R.id.fragment_container, new BlankFragment())
+                        .replace(R.id.fragment_container, new BlankFragment())
                         .addToBackStack(null)
                         .commit();
             }

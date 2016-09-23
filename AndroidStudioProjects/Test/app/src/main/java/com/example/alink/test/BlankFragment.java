@@ -24,6 +24,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.realm.Realm;
+
 
 public class BlankFragment extends Fragment {
     private Chronometer chronometer;
@@ -34,7 +36,7 @@ public class BlankFragment extends Fragment {
     int sec = 0;
     FloatingActionButton fbut;
     Timer t;
-
+public int k=1;
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
@@ -98,7 +100,7 @@ public class BlankFragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Menu fragmentMenu = new Menu();
-                fragmentTransaction.add(R.id.fragment_container,fragmentMenu);
+                fragmentTransaction.replace(R.id.fragment_container,fragmentMenu);
                 fragmentTransaction.commit();
             }
         });
@@ -116,9 +118,11 @@ public class BlankFragment extends Fragment {
         ald.setNegativeButton(R.string.b2, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
                 final Intent intentR = new Intent(getActivity(),Records.class);
-                intentR.putExtra("Name",nameUser);
-                intentR.putExtra("TimeString",timeUser);
-               // intentR.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Menu menu = new Menu();
+                FragmentTransaction ft = getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame,menu);
+                ft.commit();
                 startActivity(intentR);
             }
         });
@@ -193,37 +197,38 @@ public class BlankFragment extends Fragment {
     public class MyListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            if (v.getId()<16){
+            if (v.getId() < 16) {
                 int Idb = v.getId();
-                FloatingActionButton b = (FloatingActionButton)v.findViewById(Idb);
-                b.setVisibility(View.INVISIBLE);
+                FloatingActionButton b = (FloatingActionButton) v.findViewById(Idb);
+                if (Idb == k) {
+                    b.setVisibility(View.INVISIBLE);
+                    k++;
+                }
 
             } else {
-                chronometer.stop(); t.cancel();
+                if (k == 16) {
+                chronometer.stop();
+                t.cancel();
                 timeUser = chronometer.getText().toString();
                 ald.show();
+                Realm realm;
+                realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Base base = realm.createObject(Base.class);
+                        base.setName(nameUser);
+                        base.setTime(timeUser);
+                    }
+                });
+
             }
+              else {Toast.makeText(getActivity(),"Так не честно!",Toast.LENGTH_SHORT).show();
+                }
+        }
         }
     }
 }
-/**
-
-        for (int i=0;i<3;i++){
-            FloatingActionButton fbut = new FloatingActionButton(getActivity());
-            fbut.setImageResource(img[i]);
-
-            int xbut = rX(displaymetrics.widthPixels);
-            int ybut = rY(displaymetrics.heightPixels);
-
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)fbut.getLayoutParams();
-            params.setMargins(xbut,ybut,0,0);
-            //fbut.setX(xbut);
-            //fbut.setY(ybut);
-            fbut.setId(i+1);
-            relativeLayout.addView(fbut);
-        }
-
-**/
 
 
 

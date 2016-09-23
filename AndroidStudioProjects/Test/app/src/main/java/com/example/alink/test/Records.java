@@ -15,6 +15,7 @@ import java.util.Random;
 import io.realm.Realm;
 
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class Records extends Activity {
     Realm realm;
@@ -34,32 +35,20 @@ public class Records extends Activity {
         final String time = intent.getStringExtra("TimeString");
 
         realm=Realm.getDefaultInstance();
-
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    Base base = realm.createObject(Base.class);
-
-                        base.setName(name);
-                        base.setTime(time);
-                }
-            });
-
-
-        RealmResults<Base> realmResults= realm.where(Base.class).findAllSorted("timeUser");
-
+        RealmResults<Base> realmResults= realm.where(Base.class).findAllSorted("timeUser", Sort.ASCENDING);
         for (Base base:realmResults){
             tableLayout.addView(rowMake(base.getNameUser(),base.getTimeUser()));
         }
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // del();
+        //del();
         realm.close();
     }
-    int colo [] = {R.color.t1,R.color.t2,R.color.t3,R.color.t4};
+   // int colo [] = {R.color.t1,R.color.t2,R.color.t3,R.color.t4};
+   // int colors[] = {Color.GRAY,Color.GREEN,Color.WHITE,Color.YELLOW};
+int color=0;
     private TableRow rowMake (String name, String time){
         TableRow row = new TableRow(this);
         TextView nameView = new TextView(this);
@@ -73,12 +62,14 @@ public class Records extends Activity {
         timeView.setGravity(Gravity.CENTER_HORIZONTAL);
         timeView.setTextSize(20);
         row.addView(timeView);
-
-        Random random = new Random();
-        row.setBackgroundColor(colo[random.nextInt(colo.length)]);
+        if((color%2)==0){
+            row.setBackgroundColor(Color.GRAY);
+        } else {
+            row.setBackgroundColor(Color.WHITE);
+        }
+        color++;
         return row;
     }
-
     public void del (){
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();

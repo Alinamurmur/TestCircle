@@ -1,7 +1,6 @@
 package com.example.alink.test;
 
 import android.app.Application;
-
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 

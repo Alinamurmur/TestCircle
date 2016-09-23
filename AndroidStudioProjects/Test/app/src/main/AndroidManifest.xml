@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Records" />
-        <activity android:name=".Main2Activity"/>
+        <activity android:name=".last.Main2Activity"/>
         <activity android:name=".About"/>
     </application>
 
